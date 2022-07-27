@@ -11,6 +11,17 @@ import pandas as pd
 import time, datetime
 import os, sys
 
+dataBoundaries = {
+    "measurements": {
+        "battery_state_of_charge": {
+            "min": 0.0,
+            "max": 100.0
+            }
+        },
+    "statistics": {
+        }
+    }
+
 def main():
     # create parser
     parser = argparse.ArgumentParser(description='SolarKI')
