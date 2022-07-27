@@ -37,6 +37,25 @@ def main():
     # recreate index
     measurements.reset_index(inplace=True)
     statistics.reset_index(inplace=True)
+    # print info
+    print("Measurements:")
+    print(measurements.info())
+    print("Statistics:")
+    print(statistics.info())
+    # split datasets into train and test
+    train_measurements = measurements[:int(len(measurements)*0.8)]
+    test_measurements = measurements[int(len(measurements)*0.8):]
+    train_statistics = statistics[:int(len(statistics)*0.8)]
+    test_statistics = statistics[int(len(statistics)*0.8):]
+    # print info
+    print("Train measurements:")
+    print(train_measurements.info())
+    print("Test measurements:")
+    print(test_measurements.info())
+    print("Train statistics:")
+    print(train_statistics.info())
+    print("Test statistics:")
+    print(test_statistics.info())  
     
 
 if __name__ == '__main__':
