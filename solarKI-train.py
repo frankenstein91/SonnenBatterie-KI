@@ -35,6 +35,8 @@ def main():
     ConfigArgs.add_argument('--delimiter', type=str, default=',', help='CSV delimiter')
     # path to checkpoint directory
     ConfigArgs.add_argument('--checkpoint_dir', type=str, default='checkpoint', help='path to checkpoint directory')
+    # splitrate of training data
+    ConfigArgs.add_argument('--splitrate', type=float, default=0.8, help='splitrate of training data')
     # parse arguments to local variables
     args = parser.parse_args()
     # create checkpoint directory if it doesn't exist
@@ -60,10 +62,10 @@ def main():
     print("Statistics:")
     print(statistics.info())
     # split datasets into train and test
-    train_measurements = measurements[:int(len(measurements)*0.8)]
-    test_measurements = measurements[int(len(measurements)*0.8):]
-    train_statistics = statistics[:int(len(statistics)*0.8)]
-    test_statistics = statistics[int(len(statistics)*0.8):]
+    train_measurements = measurements[:int(len(measurements)*args.splitrate)]
+    test_measurements = measurements[int(len(measurements)*args.splitrate):]
+    train_statistics = statistics[:int(len(statistics)*args.splitrate)]
+    test_statistics = statistics[int(len(statistics)*args.splitrate):]
     # print info
     print("Train measurements:")
     print(train_measurements.info())
@@ -72,8 +74,7 @@ def main():
     print("Train statistics:")
     print(train_statistics.info())
     print("Test statistics:")
-    print(test_statistics.info())  
+    print(test_statistics.info())
     
-
 if __name__ == '__main__':
     main()
