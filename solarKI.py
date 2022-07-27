@@ -3,7 +3,6 @@
 
 import argparse
 import math
-from operator import index
 import tensorflow as tf
 import numpy as np
 import pandas as pd
