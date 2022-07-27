@@ -5,6 +5,8 @@ import argparse
 import math
 import tensorflow as tf
 import numpy as np
+import seaborn as sns
+import matplotlib as mpl
 import pandas as pd
 import time, datetime
 import os, sys
