@@ -28,6 +28,15 @@ def main():
     # create checkpoint directory if it doesn't exist
     if not os.path.exists(args.checkpoint_dir):
         os.makedirs(args.checkpoint_dir)
+    # read both datasets
+    measurements = pd.read_csv(args.measurements, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
+    statistics = pd.read_csv(args.statistics, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
+    # sort datasets by timestamp
+    measurements.sort_values(by=['timestamp'], inplace=True, ascending=True)
+    statistics.sort_values(by=['timestamp'], inplace=True, ascending=True)
+    # recreate index
+    measurements.reset_index(inplace=True)
+    statistics.reset_index(inplace=True)
     
 
 if __name__ == '__main__':
