@@ -38,6 +38,11 @@ def main():
     # recreate index
     measurements.reset_index(inplace=True)
     statistics.reset_index(inplace=True)
+    # print overview of datasets
+    print("Measurements:")
+    print(measurements.describe().transpose())
+    print("Statistics:")
+    print(statistics.describe().transpose())
     # print info
     print("Measurements:")
     print(measurements.info())
