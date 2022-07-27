@@ -1,8 +1,17 @@
 #! ./KiPython/bin/python
 # -*- coding: utf-8 -*-
 
-def main():
-    pass
+import argparse
+import math
+from operator import index
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+import time, datetime
+import os, sys
 
-if __name__ == "__main__":
+def main():
+    pass  
+
+if __name__ == '__main__':
     main()
