@@ -83,6 +83,10 @@ def main():
     print(train_statistics.info())
     print("Test statistics:")
     print(test_statistics.info())
+    # create LSTM model for time series prediction of measurements
+    # the model should be able to predict the next 48 hours of measurements
+    # list of measurements: production, consumption, battery_charge, battery_discharge, grid_feedin, grid_consumption, battery_state_of_charge, direct_consumption
+    
 
 if __name__ == '__main__':
     main()
