@@ -86,7 +86,39 @@ def main():
     # create LSTM model for time series prediction of measurements
     # the model should be able to predict the next 48 hours of measurements
     # list of measurements: production, consumption, battery_charge, battery_discharge, grid_feedin, grid_consumption, battery_state_of_charge, direct_consumption
+    measurements_model = Sequential()
+    measurements_model.add(LSTM(128, input_shape=(1, 8), return_sequences=True))
+    measurements_model.add(LSTM(128, return_sequences=True))
+    measurements_model.add(LSTM(64, return_sequences=True))
+    measurements_model.add(LSTM(64, return_sequences=True))
+    # add output layer
+    measurements_model.add(Dense(8))
+    # compile model
+    measurements_model.compile(loss='mean_squared_error', optimizer='adam')
+    # print model summary
+    print(measurements_model.summary())
+    # create LSTM model for time series prediction of statistics
+    # the model should be able to predict the next 48 hours of statistics
+    # list of statistics: produced_energy, consumed_energy, battery_charged_energy, battery_discharged_energy, grid_feedin_energy, grid_purchase_energy
+    statistics_model = Sequential()
+    statistics_model.add(LSTM(128, input_shape=(1, 6), return_sequences=True))
+    statistics_model.add(LSTM(128, return_sequences=True))
+    statistics_model.add(LSTM(64, return_sequences=True))
+    statistics_model.add(LSTM(64, return_sequences=True))
+    # add output layer
+    statistics_model.add(Dense(6))
+    # compile model
+    statistics_model.compile(loss='mean_squared_error', optimizer='adam')
+    # print model summary
+    print(statistics_model.summary())
+    # create checkpoint callback
+    measurements_model_checkpoint_callback = ModelCheckpoint(filepath=os.path.join(args.checkpoint_dir, "measurements_model_checkpoint.h5"), save_weights_only=False, monitor='val_loss', mode='min', save_best_only=True)
+    statistics_model_checkpoint_callback = ModelCheckpoint(filepath=os.path.join(args.checkpoint_dir, "statistics_model_checkpoint.h5"), save_weights_only=False, monitor='val_loss', mode='min', save_best_only=True)
+    # create early stopping callback
+    measurements_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
+    statistics_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
     
+
 
 if __name__ == '__main__':
     main()
