@@ -56,9 +56,7 @@ def main():
     # sort datasets by timestamp
     measurements.sort_values(by=['timestamp'], inplace=True, ascending=True)
     statistics.sort_values(by=['timestamp'], inplace=True, ascending=True)
-    # recreate index
-    measurements.reset_index(inplace=True)
-    statistics.reset_index(inplace=True)
+        
     # print overview of datasets
     print("Measurements:")
     print(measurements.describe().transpose())
@@ -83,6 +81,21 @@ def main():
     print(train_statistics.info())
     print("Test statistics:")
     print(test_statistics.info())
+    # print head of datasets
+    print("Train measurements:")
+    print(train_measurements.head())
+    print("Test measurements:")
+    print(test_measurements.head())
+    print("Train statistics:")
+    print(train_statistics.head())
+    print("Test statistics:")
+    print(test_statistics.head())
+    # convert datasets to tensors
+    train_measurements_tensor = tf.convert_to_tensor(train_measurements.to_numpy().reshape(-1, 1, len(train_measurements.columns)))
+    test_measurements_tensor = tf.convert_to_tensor(test_measurements.to_numpy().reshape(-1, 1, len(test_measurements.columns)))
+    train_statistics_tensor = tf.convert_to_tensor(train_statistics.to_numpy().reshape(-1, 1, len(train_statistics.columns)))
+    test_statistics_tensor = tf.convert_to_tensor(test_statistics.to_numpy().reshape(-1, 1, len(test_statistics.columns)))
+    
     # create LSTM model for time series prediction of measurements
     # the model should be able to predict the next 48 hours of measurements
     # list of measurements: production, consumption, battery_charge, battery_discharge, grid_feedin, grid_consumption, battery_state_of_charge, direct_consumption
@@ -117,6 +130,7 @@ def main():
     # create early stopping callback
     measurements_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
     statistics_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
+    
     
 
 
