@@ -37,6 +37,8 @@ def main():
     ConfigArgs.add_argument('--checkpoint_dir', type=str, default='checkpoint', help='path to checkpoint directory')
     # path to the log directory
     ConfigArgs.add_argument('--log_dir', type=str, default='log', help='path to the log directory')
+    # path to the model directory
+    ConfigArgs.add_argument('--model_dir', type=str, default='model', help='path to the model directory')
     # splitrate of training data
     ConfigArgs.add_argument('--splitrate', type=float, default=0.8, help='splitrate of training data')
     # parse arguments to local variables
@@ -52,6 +54,9 @@ def main():
         os.makedirs(os.path.join(args.log_dir,"measurements_model"))
     if not os.path.exists(os.path.join(args.log_dir,"statistics_model")):
         os.makedirs(os.path.join(args.log_dir,"statistics_model"))
+    # create model directory if it doesn't exist
+    if not os.path.exists(args.model_dir):
+        os.makedirs(args.model_dir)
     # read both datasets
     measurements = pd.read_csv(args.measurements, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
     statistics = pd.read_csv(args.statistics, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
@@ -139,6 +144,16 @@ def main():
     # train models
     measurements_model.fit(train_measurements_tensor, train_measurements_tensor, epochs=150, batch_size=32, validation_data=(test_measurements_tensor, test_measurements_tensor), callbacks=[measurements_model_checkpoint_callback, measurements_model_earlystopping_callback, measurements_model_tensorboard_callback])
     statistics_model.fit(train_statistics_tensor, train_statistics_tensor, epochs=150, batch_size=32, validation_data=(test_statistics_tensor, test_statistics_tensor), callbacks=[statistics_model_checkpoint_callback, statistics_model_earlystopping_callback, statistics_model_tensorboard_callback])
+
+    # evaluate models
+    measurements_model_loss = measurements_model.evaluate(test_measurements_tensor, test_measurements_tensor, verbose=0)
+    statistics_model_loss = statistics_model.evaluate(test_statistics_tensor, test_statistics_tensor, verbose=0)
+    print(f"Measurements model loss: {measurements_model_loss}")
+    print(f"Statistics model loss: {statistics_model_loss}")
+    # save models
+    measurements_model.save(os.path.join(args.model_dir, "measurements_model.h5"))
+    statistics_model.save(os.path.join(args.model_dir, "statistics_model.h5"))
+        
 
 if __name__ == '__main__':
     main()
