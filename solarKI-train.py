@@ -2,21 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import math
 import tensorflow as tf
-import numpy as np
-import seaborn as sns
-import matplotlib as mpl
 import pandas as pd
-import time, datetime
-import os, sys
+import os
 # import keras
 from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Input, Dense, GRU, LSTM, Embedding, Dropout, concatenate, Flatten, Activation, Conv1D
+from tensorflow.python.keras.layers import Dense, LSTM
 from tensorflow.python.keras.callbacks import ModelCheckpoint, EarlyStopping
-from tensorflow.python.keras.models import load_model
-from tensorflow.python.keras.models import model_from_json
-from tensorflow.python.keras.models import model_from_yaml
 
 
 dataBoundaries = {
