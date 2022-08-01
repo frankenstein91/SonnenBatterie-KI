@@ -130,9 +130,10 @@ def main():
     # create early stopping callback
     measurements_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
     statistics_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
-    
-    
 
+    # train models
+    measurements_model.fit(train_measurements_tensor, train_measurements_tensor, epochs=100, batch_size=32, validation_data=(test_measurements_tensor, test_measurements_tensor), callbacks=[measurements_model_checkpoint_callback, measurements_model_earlystopping_callback])
+    statistics_model.fit(train_statistics_tensor, train_statistics_tensor, epochs=100, batch_size=32, validation_data=(test_statistics_tensor, test_statistics_tensor), callbacks=[statistics_model_checkpoint_callback, statistics_model_earlystopping_callback])
 
 if __name__ == '__main__':
     main()
