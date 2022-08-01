@@ -43,6 +43,8 @@ def main():
     ConfigArgs.add_argument('--delimiter', type=str, default=',', help='CSV delimiter')
     # path to checkpoint directory
     ConfigArgs.add_argument('--checkpoint_dir', type=str, default='checkpoint', help='path to checkpoint directory')
+    # path to the log directory
+    ConfigArgs.add_argument('--log_dir', type=str, default='log', help='path to the log directory')
     # splitrate of training data
     ConfigArgs.add_argument('--splitrate', type=float, default=0.8, help='splitrate of training data')
     # parse arguments to local variables
@@ -50,6 +52,14 @@ def main():
     # create checkpoint directory if it doesn't exist
     if not os.path.exists(args.checkpoint_dir):
         os.makedirs(args.checkpoint_dir)
+    # create log directory if it doesn't exist
+    if not os.path.exists(args.log_dir):
+        os.makedirs(args.log_dir)
+    #create sub dirs if not exist
+    if not os.path.exists(os.path.join(args.log_dir,"measurements_model")):
+        os.makedirs(os.path.join(args.log_dir,"measurements_model"))
+    if not os.path.exists(os.path.join(args.log_dir,"statistics_model")):
+        os.makedirs(os.path.join(args.log_dir,"statistics_model"))
     # read both datasets
     measurements = pd.read_csv(args.measurements, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
     statistics = pd.read_csv(args.statistics, delimiter=args.delimiter,parse_dates=["timestamp"], index_col="timestamp")
@@ -130,10 +140,13 @@ def main():
     # create early stopping callback
     measurements_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
     statistics_model_earlystopping_callback = EarlyStopping(monitor='val_loss', mode='min', patience=10)
+    # create tensorboard callback
+    measurements_model_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(args.log_dir,"measurements_model"), histogram_freq=1)
+    statistics_model_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(args.log_dir,"statistics_model"), histogram_freq=1)
 
     # train models
-    measurements_model.fit(train_measurements_tensor, train_measurements_tensor, epochs=100, batch_size=32, validation_data=(test_measurements_tensor, test_measurements_tensor), callbacks=[measurements_model_checkpoint_callback, measurements_model_earlystopping_callback])
-    statistics_model.fit(train_statistics_tensor, train_statistics_tensor, epochs=100, batch_size=32, validation_data=(test_statistics_tensor, test_statistics_tensor), callbacks=[statistics_model_checkpoint_callback, statistics_model_earlystopping_callback])
+    measurements_model.fit(train_measurements_tensor, train_measurements_tensor, epochs=150, batch_size=32, validation_data=(test_measurements_tensor, test_measurements_tensor), callbacks=[measurements_model_checkpoint_callback, measurements_model_earlystopping_callback, measurements_model_tensorboard_callback])
+    statistics_model.fit(train_statistics_tensor, train_statistics_tensor, epochs=150, batch_size=32, validation_data=(test_statistics_tensor, test_statistics_tensor), callbacks=[statistics_model_checkpoint_callback, statistics_model_earlystopping_callback, statistics_model_tensorboard_callback])
 
 if __name__ == '__main__':
     main()
