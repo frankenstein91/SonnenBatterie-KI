@@ -1,1 +1,5 @@
 # SonnenBatterie KI
+## Idea for this tool
+I logged into the website https://my.sonnen.de/ a few days ago and saw you can download the measurement data and statistics via CSV. Since the company behind the product unfortunately does not provide any future data, I thought I could upgrade this with some Python and OpenSource.
+
+I realize that an already trained AI model would simplify things for the end user, but due to the different configurations of the photovoltaic systems.... I do not see this as a good solution. Installations vary in orientation, tilt angle, geographic location, weather, hardware used, and owner effort for cleaning as well as maintenance. Therefore, I can understand that the company does not offer anything here, because this would have to perform a new training for each customer. However, the customer has the possibility.
