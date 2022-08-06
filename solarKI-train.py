@@ -56,11 +56,20 @@ def main():
     ConfigArgs.add_argument(
         "--splitrate", type=float, default=0.8, help="splitrate of training data"
     )
+    # output_dir
+    ConfigArgs.add_argument(
+        "--output_dir", type=str, default="output", help="output directory"
+    )
+
     # parse arguments to local variables
     args = parser.parse_args()
     # create checkpoint directory if it doesn't exist
     if not os.path.exists(args.checkpoint_dir):
         os.makedirs(args.checkpoint_dir)
+    # create output directory if it doesn't exist
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
+        
     # create log directory if it doesn't exist
     if not os.path.exists(args.log_dir):
         os.makedirs(args.log_dir)
